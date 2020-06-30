@@ -1,84 +1,80 @@
 " Author: Jan Meppe
 " v1.0.0 - 2020-06-30 - I like VScode but Vim is my baby
 
-" Enable syntax highlighting
-syntax on               
+" ==============================================================================
+" Settings 
+" ==============================================================================
 
-" Enable filetype plugin and indent
-filetype plugin indent on 
+syntax on                                           " Enable syntax highlighting
+filetype plugin indent on                    " Enable filetype plugin and indent
 
-" Set indent (perhaps remove smartindent, had it disabled) 
-set autoindent 
-set smartindent 
+set autoindent                                               " Enable autoindent
+set smartindent                                             " Enable smartindent
+set nocompatible                                          " Disable Vi emulation
 
-" Disable Vi emulation
-set nocompatible
+set mouse=a                                          " Enable mouse in all modes
+set cmdheight=2                          " Get rids of 'press enter to continue'
+set rnu                                              " Set relative line numbers
 
-" Enable mouse in all modes 
-set mouse=a
+set tw=80                    " Set textwrap to 80 but disable (gq works with 80)
+set nowrap                                                        " Disable wrap
 
-" Get rids of 'press enter to continue'
-set cmdheight=2
+set wildmenu                                           " Better CLI autocomplete
+set ruler                                           " Show position in statusbar
+set showcmd                                               " Shows typing command
+set backspace=indent,eol,start                  " Allow backspace in insert mode
+set cursorline                                   " Highlight current cursor line
 
-" Set relative line numbers 
-set rnu
-
-" Set textwrap to 80 but disable (gq works with 80) 
-set tw=80
-set nowrap              " Disable wrap 
-
-" Better CLI autocomplete
-set wildmenu
-
-" Show position in statusbar
-set ruler
-
-" Shows the command that you are typing as you are typing it
-set showcmd
-
-" Allow backspace in insert mode
-set backspace=indent,eol,start
-
-" Highlight current cursor line
-set cursorline
-
-" Ignore case when searching, highlight results 
-set ignorecase
+set ignorecase                   " Ignore case when searching, highlight results
 set smartcase
 set hlsearch
 
-" Split right and below instead of left and top
-set splitright
+set splitright                   " Split right and below instead of left and top
 set splitbelow 
 
-" Disable swap and backup files 
-set nobackup            
+set nobackup                                     " Disable swap and backup files
 set nowritebackup
 set noswapfile
 
-" Tabs for indentation
-set tabstop=4   
+set tabstop=4                                             " Tabs for indentation
 set softtabstop=4
 set shiftwidth=4
 set shiftround
 set expandtab
 
-" Removes "E37: No write since last change (add ! to override)".
-set hidden 
+set hidden         " Removes E37: No write since last change (add ! to override)
 
-" Default airline only pops up when creating a split
-set laststatus=2
+set laststatus=2            " Default airline only pops up when creating a split
 let g:airline_powerline_fonts = 1
 
-" remove right-hand and left-hand scroll bar 
-set guioptions-=r  
+set guioptions-=r                   " remove right-hand and left-hand scroll bar
 set guioptions-=L  
 
-" Else LaTeX gets weird 
-set conceallevel=0
+set conceallevel=0                                   " Fixes weird LaTeX symbols
+set autoread                               " Reload file if changed from outside
 
-" Reload file if changed from outside
-set autoread
+" Reloads .vimrc on save
+if has("autocmd")
+augroup UniqueNameForYourAuGroup
+    " Clear autocmds for this group
+    autocmd!
+    " Add your autocommands here
+    autocmd! BufWritePost .vimrc nested source <afile>
+augroup end
+endif
+
+" :help buffer on left
+augroup vimrc_help
+  autocmd!
+  autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | endif
+augroup END
+
+" Set filetype for markdown automatically 
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+
+" ==============================================================================
+" Visuals
+" ==============================================================================
 
 " Access 256 color mode
 let base16colorspace=256 
@@ -94,6 +90,10 @@ if !has("gui_running")
 endif
 set background=dark
 colorscheme solarized
+
+" ==============================================================================
+" Mappings 
+" ==============================================================================
 
 " Mappings
 let mapleader = ","
@@ -114,12 +114,6 @@ noremap N Nzz
 vnoremap < <gv
 vnoremap > >gv
 
-" Remap cntrl + n to open Nerdtree
-"map <C-n>:Explore<CR>
-map <C-n> :NERDTreeToggle<CR>
-let NERDTreeHighlightCursorline=1
-let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
-
 " Show different background for col >80
  let &colorcolumn=join(range(81,999),",")
 
@@ -132,8 +126,9 @@ nnoremap <C-H> <C-W><C-H>
 " Map <C-L> (redraw screen) to also turn off search highlighting until the
 nnoremap <Leader>l :nohl<CR><C-L>
 
-" <Leader>v vertical split edit vimrc
+" <Leader>v/V vertical split edit vimrc
 map <Leader>v :vsp $MYVIMRC<CR><C-W> 
+map <Leader>V :e $MYVIMRC<CR><C-W> 
 
 " F3 to insert 2020-06-30 Tue 10:12 
 nmap <F3> i<C-R>=strftime("%Y-%m-%d %a %H:%M ")<CR><Esc>
@@ -153,10 +148,23 @@ map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
 
-" ???
+" Right align comments with <Leader>Tab (this is fucking magic to me)
+nnoremap <leader><tab> f"mc80A <esc>080lDgelD`cP
+
+" Cycle through buffers fast
+nnoremap <silent> [b :bprevious<CR>
+nnoremap <silent> ]b :bnext<CR>
+nnoremap <silent> [B :bfirst<CR>
+nnoremap <silent> ]B :blast<CR>
+
+" ==============================================================================
+" Plugins & plugin specific settings
+" ==============================================================================
+
+" Loads Vundle (I think?)
 set rtp+=~/.vim/bundle/Vundle.vim
 
-" Ctrl + P
+" Ctrl + P settings
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.aux " Ignore some files   
 
@@ -174,10 +182,6 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'scrooloose/nerdcommenter'
-" Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets' " Snippets are separate from the engine
-Plugin 'junegunn/goyo.vim'
-Plugin 'goldfeld/vim-seek'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -199,6 +203,12 @@ execute pathogen#infect()
 let g:NERDTreeDirArrowExpandable = '>'
 let g:NERDTreeDirArrowCollapsible = '>'
 
+" Remap cntrl + n to open Nerdtree
+map <C-n> :NERDTreeToggle<CR>
+map <leader>r :NERDTreeFind<cr>
+let NERDTreeHighlightCursorline=1
+let NERDTreeIgnore = ['tmp', '.yardoc', 'pkg']
+
 " Paths for VimwWiki
 let g:vimwiki_list = [{
   \ 'path': '$HOME/vimwiki',
@@ -206,45 +216,11 @@ let g:vimwiki_list = [{
   \ 'template_default': 'default',
   \ 'template_ext': '.html'}]
 
-" Reloads .vimrc on save
-if has("autocmd")
-augroup UniqueNameForYourAuGroup
-    " Clear autocmds for this group
-    autocmd!
-    " Add your autocommands here
-    autocmd! BufWritePost .vimrc nested source <afile>
-augroup end
-endif
-
-" :help buffer on left
-augroup vimrc_help
-  autocmd!
-  autocmd BufEnter *.txt if &buftype == 'help' | wincmd L | endif
-augroup END
-
-" }}} 
-
-" Brief vim surround help 
-" Vim-surround cheatcheet
+" Brief Vim surround help 
 " ds<target>                     delete surroundings
 " cs<target><replacement>        change surroundings
-" cS                             change surroundings; and put surrounded text on
-"                                newline
+" cS                             change surroundings
 " ) b
 " } B
 " ] r
 " > a
-"
-
-" Set filetype for markdown automatically 
-autocmd BufNewFile,BufReadPost *.md set filetype=markdown
-
-" Cycle through buffers fast
-nnoremap <silent> [b :bprevious<CR>
-nnoremap <silent> ]b :bnext<CR>
-nnoremap <silent> [B :bfirst<CR>
-nnoremap <silent> ]B :blast<CR>
-
-map <leader>r :NERDTreeFind<cr>
-
-
