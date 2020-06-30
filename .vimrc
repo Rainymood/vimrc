@@ -1,28 +1,12 @@
-
  
-"=============================================================================="
-"                   __                 __  ___                                 "
-"                  / /____ _ ____     /  |/  /___   ____   ____   ___          "
-"             __  / // __ `// __ \   / /|_/ // _ \ / __ \ / __ \ / _ \         "
-"            / /_/ // /_/ // / / /  / /  / //  __// /_/ // /_/ //  __/         "
-"            \____/ \__,_//_/ /_/  /_/  /_/ \___// .___// .___/ \___/          "
-"                _   __ (_)____ ___   _____ ____/_/    /_/                     "
-"               | | / // // __ `__ \ / ___// ___/                              "
-"             _ | |/ // // / / / / // /   / /__                                "
-"            (_)|___//_//_/ /_/ /_//_/    \___/                                "
-"                                                                              "
-"=============================================================================="
-                                                                               
-" Settings {{{
-
-syntax on
+syntax on               " Enable syntax highlighting
 filetype indent on
 filetype plugin on 
 
-set nocompatible        " ???
+set nocompatible        " Disable Vi emulation
 set mouse=a             " Enable mouse in all modes 
 set cmdheight=2         " Gets rid of all the press enter to continue
-set number              " Displays line numbers on the left
+set rnu                 " Set relative line numbers
 set tw=80               " Set textwidth hard wrap to 80 chars 
 set nowrap              " Disable wrap 
 set wildmenu            " Better CLI autocomplete
@@ -46,11 +30,6 @@ set splitbelow
 set nobackup            
 set nowritebackup
 set noswapfile
-
-" Set foldmethod to fold-markers {{{,}}} (no shit) zR to open, zM to close 
-set foldmethod=marker 
-" Set to no fold on open file
-set foldlevelstart=99 
 
 " Tabs for indentation
 set tabstop=4   
@@ -77,10 +56,6 @@ set conceallevel=0
 " Reload file if changed from outside
 set autoread
 
-" }}}
-
-" Visual {{{
-
 let base16colorspace=256 " Access colors present in 256 colorspace
 set t_Co=256 " 256 color mode
 
@@ -100,10 +75,7 @@ colorscheme solarized
 "colorscheme badwolf
 "colorscheme space-vim-dark
 
-"}}}
-
 " Mappings {{{
-
 let mapleader = ","
 imap kj <Esc>
 nmap Y y$
@@ -166,84 +138,6 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 
-"--------------------------------------------------------------------------------
-"                               __       _            
-"                              / /  __ _| |_ _____  __
-"                             / /  / _` | __/ _ \ \/ /
-"                            / /__| (_| | ||  __/>  < 
-"                            \____/\__,_|\__\___/_/\_\
-"                                                     
-"--------------------------------------------------------------------------------
-"
-" Latex bindings. ASCII font is Ogre from
-" http://patorjk.com/software/taag/#p=display&f=Ogre&t=Latex 
-" 
-" 2-12-2016 I am officially a retard. I just realized that there are
-" a shitton of bindings available for latex already ... such as `/ for fraction
-" .. haha god this is hilarious. 
-"
-" 23-3-2017 I think my most used bindings are like <sdf> for _ and the leader
-" align thingy. Its so neat.  
-
-" Remapped imap dfd to _
-" I just found out that __ => _{}++
-imap dfd _
-imap <Leader>h \hat{}
-imap <Leader>d \dot{}
-imap <Leader>dd \ddot{}
-imap <Leader>b {}
-imap <Leader>p () 
-imap <Leader>B []
-imap <Leader>c <F7>
-
-imap FRE \red{}
-imap FGE \gray{}
-
-" Remap <Leader>a to align environment
-map <Leader>a i%<CR>%<CR><++><Esc>kO<Esc><f5>8<CR>kj<C-l>i<Tab>
-
-" <Leader>A to <f5>8<CR>kj<C-l>i<Tab> (align with label)
-map <Leader>A i%<CR>%<Esc>O<Esc><f5>7<CR>kj<C-l>i<Tab>
-
-" Retarded shit because of automated indenting lol 
-map <Leader>b <Esc>i\textbf{}kj<<f{a
-
-" Leader t => text
-" Leader it => italix text 
-imap <Leader>t <Esc>a\text{}
-imap <Leader>it <Esc>a\textit{}
-
-" Took 10 minutes to write this partial derivative macro. 
-" Remaps leader p to partial derivative and entering you in the first frac
-imap <Leader>p \frac{\partial <++>}{\partial <++>}<++>kj0i<C-j>
-
-" Remaps <Leader>sq to square root with cursor in the middle and bullet esc
-imap <Leader>sq \sqrt{}
-
-" Annoying \{ \} map for latex 
-imap <Leader>set \{\}<++><Esc>F\i
-
-imap <Leader>fr \frac{<++>}{<++>}<++><Esc>0i<C-j>
-
-" Imap sum with lower upper and outside escape option 
-imap `o \sum_{<++>}^{<++>}<++><Esc>0i<C-j>
-
-" Imap sum with lower upper and outside escape option 
-imap <Leader>ss \subsection*{}
-
-" tingy 9 to inverse
-imap `9 ^^-1<C-j>
-
-" imap `` ^
-
-" I use these so often 
-imap fds \
-imap sdf _
-imap 44 $$
-"imap == &= 
-
-imap Rn \R^n
-
 "nmap <F3> i<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
 "imap <F3> <C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR>
 
@@ -252,30 +146,6 @@ imap <F3> <C-R>=strftime("%Y-%m-%d %a %H:%M ")<CR>
 
 imap <F4> <C-R>=strftime("%Y-%m-%d %a ")<CR>
 nmap <F4> i<C-R>=strftime("%Y-%m-%d %a ")<CR><Esc>
-
-"nmap <Leader>f <F3>
-"imap <Leader>f <F3>
-
-" 2017-10-23 Mon 11:38  Remap leader l to anki latex bind 
-imap <Leader>l []latex<Esc>A[]/latex<Esc>0i<C-j>$$
-
-imap avg \frac{1}{N}\sum_{i=1}^{N}
-
-imap <Leader>rb \bar{}r<C-j>
-
-" Datetime
-"nmap <F3> i<C-R>=strftime("%Y-%m-%d %a  ")<CR><Esc>
-"imap <F3> <C-R>=strftime("%Y-%m-%d %a  ")<CR>
-
-"nmap <F4> i<C-R>=strftime("%H:%M ")<CR><Esc>
-"imap <F4> <C-R>=strftime("%H:%M  ")<CR>
-
-" Turn paragraph into gray 
-map <Leader>gg vipgqysip{i\graykj}
-
-map <F5> <Esc>:Vimwiki2HTMLBrowse<CR>
-
-"-------------------------------------------------------------------------------- 
 
 "<Leader>ss toggles spellcheck
 map <leader>ss :setlocal spell!<cr>
